@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Deterministic>false</Deterministic>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resources\StripeExtIcon.png">
+      <LogicalName>psn.PH.StripeExtIcon.png</LogicalName>
+    </EmbeddedResource>
+    <Content Include="resources\*.*">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="OutSystems.ExternalLibraries.SDK" Version="*" />
+    <PackageReference Include="Newtonsoft.Json" Version="*" />
+    <PackageReference Include="Stripe.net" Version="*" />
+  </ItemGroup>
+</Project>

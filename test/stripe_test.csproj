@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\src\stripe.csproj"/>
+    <PackageReference Include="xunit" Version="*"/>
+    <PackageReference Include="xunit.runner.visualstudio" Version="*"/>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="*"/>
+  </ItemGroup>
+</Project>
