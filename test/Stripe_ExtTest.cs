@@ -51,6 +51,11 @@ public class Stripe_ExtTests
                 price_id = "price_1NbbgLCrPSPWXnSu7l0PCoGt",
                 quantity = 2,
                 },
+                new psn.PH.Structures.SessionLineItem
+                {
+                price_id = "price_1Ne7VvCrPSPWXnSuRH0Yrkld",
+                quantity = 2,
+                },
             };
         var session = se.CreateCheckoutSession_Ext(api_key, "http://www.nowhere.com/main", lineItems, "subscription");
         output.WriteLine(session);
@@ -66,6 +71,11 @@ public class Stripe_ExtTests
                 {
                 price_id = "price_1NbbkuCrPSPWXnSudFVjHd80",
                 quantity = 5,
+                },
+                new psn.PH.Structures.SessionLineItem
+                {
+                price_id = "price_1Ne7WxCrPSPWXnSuMb4OYG18",
+                quantity = 2,
                 },
             };
         var session = se.CreateCheckoutSession_Ext(api_key, "http://www.nowhere.com/main", lineItems, "payment");
