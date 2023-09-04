@@ -91,4 +91,14 @@ namespace psn.PH.Structures
         [OSStructureField(DataType = OSDataType.Text, Description = "metadata value", IsMandatory = true)]
         public string value;
     }
+
+    [OSStructure(Description = "Payment method card options")]
+    public struct PaymentMethodCardOptions
+    {
+        public string Cvc;
+        public long? ExpMonth;
+        public long? ExpYear;
+        public string Number;
+        public string Token;
+    }
 }

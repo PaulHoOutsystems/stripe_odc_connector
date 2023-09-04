@@ -16,7 +16,7 @@ namespace psn.PH
         /// Create a customer.
         /// </summary>
         [OSAction(Description = "Create a customer.", ReturnName = "CustomerId")]
-        public string CreateCustomer_Ext(string api_key, string name, string email, string phone);
+        public string CreateCustomer_Ext(string api_key, string name, string email, string phone, PaymentMethodCardOptions cardOptions);
         /// <summary>
         /// Create a payment intent.
         /// </summary>
@@ -42,13 +42,31 @@ namespace psn.PH
         /// </summary>
         [OSAction(Description = "Create a check out session.", ReturnName = "JSONResponse")]
         public string CreateCheckoutSession_Ext(string api_key, string successful_url, List<psn.PH.Structures.SessionLineItem> sessionLineItems, string mode);
-
-        [OSAction(Description = "Create a subscription.", ReturnName = "SubscriptionId")]
+        /// <summary>
+        /// Create a subscription.
+        /// </summary>
+        [OSAction(Description = "Create a subscription.", ReturnName = "SubscriptionJSON")]
         public string CreateSubscription_Ext(string api_key, string customer_id, List<psn.PH.Structures.SubscriptionLineItem> subscriptionLineItems, List<psn.PH.Structures.SubscriptionMetadata> subscriptionMetadataItems);
-
+        /// <summary>
+        /// Retrieve subscriptions of a customer.
+        /// </summary>
         [OSAction(Description = "Retrieve subscriptions of customer.", ReturnName = "ListofSubscriptionIds")]
         public List<string> RetrieveSubscriptions_Ext(string api_key, string customer_id);
-        [OSAction(Description = "Get unique build information for this custom library.", ReturnName = "buildInfo")]
+        /// <summary>
+        /// Retrieve subscriptions with details of a customer.
+        /// </summary>
+        [OSAction(Description = "Retrieve subscriptions with details of customer.", ReturnName = "ListofSubscriptionWithDetails")]
+        public List<string> RetreiveSubscriptionsWithDetails_Ext(string api_key, string customer_id);
+        /// <summary>
+        /// Retrieve subscription details of a customer.
+        /// </summary>
+        [OSAction(Description = "Retrieve the subscription details of a customer.", ReturnName = "SubscriptionDetails")]
+        public string RetrieveSubscriptionDetails_Ext(string api_key, string customer_id, string subscriptionId);
+
+        /// <summary>
+        /// Retrieve unique build information of this custom library.
+        /// </summary>
+        [OSAction(Description = "Get unique build information of this custom library.", ReturnName = "buildInfo")]
         public string GetBuildInfo_Ext();
 
     }

@@ -1,0 +1,25 @@
+<project>
+    <property name="outzipfilename" value="Strip Connector (Black Belt Edition)"/>
+    <property name="publish.dir" value="bin\Release\net6.0\linux-x64\publish"/>
+    <property name="buildnumberchecker" value="buildnumberchecker"/>
+	<target name="packzip">
+		<delete dir="${publish.dir}"/>
+		<delete failonerror="false">
+            <fileset>
+                <include name="${outzipfilename}.*"/>
+            </fileset>
+        </delete>  
+		<tstamp property="build.info" pattern="yyyyMMddHHmmss"/>
+		<echo message="${build.info}" file="resources\buildinfo.txt"/> 
+		<exec program="dotnet">
+			<arg line="publish -c Release -r linux-x64 --self-contained false stripe.csproj"/>
+		</exec>		
+        <echo message="Build Information = ${build.info}"/>
+		<zip zipfile="${outzipfilename}.${build.info}.zip">
+			<fileset basedir="${publish.dir}">
+				<include name="**/*"/>
+				<exclude name="**/${buildnumberchecker}*"/>
+			</fileset>
+		</zip>
+	</target>
+</project>

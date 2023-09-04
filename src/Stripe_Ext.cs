@@ -57,22 +57,37 @@ namespace psn.PH
             }
         }
 
-        public string CreateCustomer_Ext(string api_key, string name, string email, string phone)
+        public string CreateCustomer_Ext(string api_key, string name, string email, string phone, psn.PH.Structures.PaymentMethodCardOptions cardOptions)
         {
             if (!isValidateEmailAddress(email))
             {
                 throw new ArgumentException("Invalid email format supplied as argument");
             }
             StripeConfiguration.ApiKey = api_key;
-            var options = new CustomerCreateOptions
+
+            var ccoptions = new CustomerCreateOptions
             {
                 Email = email,
                 Name = name,
                 Phone = phone,
             };
-            var service = new CustomerService();
-            var serviceResult = service.Create(options);
-            return serviceResult.Id;
+            var cservice = new CustomerService();
+            var serviceResult = cservice.Create(ccoptions);
+            var cardTokenOptions = new CardCreateOptions();
+            var customerId = serviceResult.Id;
+            if (cardOptions.Token != String.Empty)
+            {
+                cardTokenOptions = new CardCreateOptions
+                {
+                    Source = cardOptions.Token,
+                };
+
+            }
+            // associate the card created to the customer as the source of payment
+            var _cardService = new CardService();
+            _cardService.Create(customerId, cardTokenOptions);
+
+            return customerId;
         }
 
         public Intent CreatePaymentIntent_Ext(string api_key, int amount, string currency, bool automatic_payment_method, string customer_id)
@@ -226,7 +241,7 @@ namespace psn.PH
             };
             var service = new SubscriptionService();
             var serviceResult = service.Create(options);
-            return serviceResult.Id;
+            return serviceResult.ToJson();
         }
 
         public List<string> RetrieveSubscriptions_Ext(string api_key, string customer_id)
@@ -246,24 +261,62 @@ namespace psn.PH
             }
             return result;
         }
-        public string GetBuildInfo_Ext()
+
+        public List<string> RetreiveSubscriptionsWithDetails_Ext(string api_key, string customer_id)
         {
-            var assembly = Assembly.GetExecutingAssembly();
-            var filePath = assembly.Location;
-            const int peHeaderOffset = 60;
-            const int linkerTimestampOffset = 8;
-            var bytes = new byte[2048];
-
-            using (var file = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            StripeConfiguration.ApiKey = api_key;
+            var options = new SubscriptionListOptions
             {
-                file.Read(bytes, 0, bytes.Length);
+                Customer = customer_id,
+            };
+            var service = new SubscriptionService();
+            StripeList<Subscription> subscriptions = service.List(
+              options);
+            List<string> result = new();
+            foreach (var subscription in subscriptions)
+            {
+                result.Add(subscription.ToJson());
             }
-
-            var headerPos = BitConverter.ToInt32(bytes, peHeaderOffset);
-            var secondsSince1970 = BitConverter.ToInt32(bytes, headerPos + linkerTimestampOffset);
-            var dt = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            return dt.AddSeconds(secondsSince1970).ToLocalTime().ToString("yyyyMMddHHmmss");
+            return result;
         }
 
+        public string RetrieveSubscriptionDetails_Ext(string api_key, string customer_id, string subscriptionId)
+        {
+            StripeConfiguration.ApiKey = api_key;
+            var options = new SubscriptionListOptions
+            {
+                Customer = customer_id,
+            };
+            var service = new SubscriptionService();
+            StripeList<Subscription> subscriptions = service.List(
+              options);
+            foreach (var subscription in subscriptions)
+            {
+                if (subscription.Id == subscriptionId)
+                {
+                    return subscription.ToJson();
+                }
+
+            }
+            return string.Empty;
+        }
+
+        private string ReadResource(string name)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            string resourcePath = name;
+            using (Stream stream = assembly.GetManifestResourceStream(resourcePath))
+            {
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    return reader.ReadToEnd();
+                }
+            }
+        }
+
+        public string GetBuildInfo_Ext()
+        {
+            return ReadResource("psn.PH.buildinfo.txt");
+        }
     }
 }

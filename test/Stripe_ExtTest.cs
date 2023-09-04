@@ -21,7 +21,14 @@ public class Stripe_ExtTests
         string name = "John Doe";
         string email = "john.doe@nowhere.com";
         string phone = "+1982659123";
-        var cust_id = se.CreateCustomer_Ext(api_key, name, email, phone);
+        var cust_id = se.CreateCustomer_Ext(api_key, name, email, phone, new PaymentMethodCardOptions
+        {
+            Number = "4242424242424242",
+            ExpMonth = 12,
+            ExpYear = 2034,
+            Cvc = "314",
+            Token = "tok_us",
+        });
         output.WriteLine("Customer ID = " + cust_id.ToString());
         Assert.True(cust_id.ToString().Length > 0);
     }
@@ -33,7 +40,14 @@ public class Stripe_ExtTests
         string name = "John Doe";
         string email = "john.doe@nowhere.com";
         string phone = "+1982659123";
-        var cust_id = se.CreateCustomer_Ext(api_key, name, email, phone);
+        var cust_id = se.CreateCustomer_Ext(api_key, name, email, phone, new PaymentMethodCardOptions
+        {
+            Number = "4242424242424242",
+            ExpMonth = 12,
+            ExpYear = 2034,
+            Cvc = "314",
+            Token = "tok_us",
+        });
         Intent intent = se.CreatePaymentIntent_Ext(api_key, 100, "sgd", true, cust_id);
         output.WriteLine("client_secret = " + intent.client_secret);
 
@@ -74,12 +88,46 @@ public class Stripe_ExtTests
                 },
                 new psn.PH.Structures.SessionLineItem
                 {
-                price_id = "price_1Ne7WxCrPSPWXnSuMb4OYG18",
+                price_id = "price_1NbbkuCrPSPWXnSudFVjHd80", // price_1Ne7WxCrPSPWXnSuMb4OYG18
                 quantity = 2,
                 },
             };
         var session = se.CreateCheckoutSession_Ext(api_key, "http://www.nowhere.com/main", lineItems, "payment");
         output.WriteLine(session);
+    }
+
+    [Fact]
+    public void CreateSubscription_Ext_test1()
+    {
+        var se = new Stripe_Ext();
+        string name = "John Doe";
+        string email = "john.doe@nowhere.com";
+        string phone = "+1982659123";
+        var cust_id = se.CreateCustomer_Ext(api_key, name, email, phone, new PaymentMethodCardOptions
+        {
+            Number = "4242424242424242",
+            ExpMonth = 12,
+            ExpYear = 2034,
+            Cvc = "314",
+            Token = "tok_us",
+        });
+        List<psn.PH.Structures.SubscriptionLineItem> subscriptionLineItems = new List<PH.Structures.SubscriptionLineItem> {
+            new SubscriptionLineItem {
+                price_id = "price_1Ne7VvCrPSPWXnSuRH0Yrkld",
+            }
+        };
+        List<psn.PH.Structures.SubscriptionMetadata> subscriptionMetadataItems = new List<PH.Structures.SubscriptionMetadata> {
+            new SubscriptionMetadata {
+                key = "color",
+                value = "red"
+            },
+            new SubscriptionMetadata {
+                key = "origin",
+                value = "Europe"
+            }
+        };
+        var subscription = se.CreateSubscription_Ext(api_key, cust_id, subscriptionLineItems, subscriptionMetadataItems);
+        Assert.True(subscription.Length > 0 && subscription.IndexOf("\"id\": \"sub_") > 0 && subscription.IndexOf("\"object\": \"subscription\"") > 0);
     }
 
     [Fact]
