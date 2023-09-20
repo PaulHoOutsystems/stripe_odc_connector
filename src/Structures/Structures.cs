@@ -101,4 +101,37 @@ namespace psn.PH.Structures
         public string Number;
         public string Token;
     }
+
+    [OSStructure(Description = "Address Options (mirrors Stripe)")]
+    public struct AddressOptions
+    {
+        public string City;
+        public string Country;
+        public string Line1;
+        public string Line2;
+        public string PostalCode;
+        public string State;
+    }
+
+    [OSStructure(Description = "Shipping Options (mirrors Stripe)")]
+    public struct ShippingOptions
+    {
+        public AddressOptions Address;
+        public string Name;
+        public string Phone;
+    }
+
+    [OSStructure(Description = "Customer Update Options (adapted from Stripe)")]
+    public struct CustomerUpdateOptions
+    {
+        public AddressOptions Address;
+
+        [OSStructureField(DataType = OSDataType.Text, Description = "Email", IsMandatory = true)]
+        public string Email;
+        [OSStructureField(DataType = OSDataType.Text, Description = "Name", IsMandatory = true)]
+        public string Name;
+        [OSStructureField(DataType = OSDataType.Text, Description = "Phone", IsMandatory = true)]
+        public string Phone;
+        public ShippingOptions Shipping;
+    }
 }

@@ -17,6 +17,9 @@ namespace psn.PH
         /// </summary>
         [OSAction(Description = "Create a customer.", ReturnName = "CustomerId")]
         public string CreateCustomer_Ext(string api_key, string name, string email, string phone, PaymentMethodCardOptions cardOptions);
+
+        [OSAction(Description = "Update a customer.", ReturnName = "CustomerId")]
+        public string UpdateCustomer_Ext(string api_key, string customerId, CustomerUpdateOptions options);
         /// <summary>
         /// Create a payment intent.
         /// </summary>

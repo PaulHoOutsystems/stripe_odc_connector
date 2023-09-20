@@ -90,6 +90,48 @@ namespace psn.PH
             return customerId;
         }
 
+        public string UpdateCustomer_Ext(string api_key, string customerId, psn.PH.Structures.CustomerUpdateOptions options)
+        {
+            var cuo = new Stripe.CustomerUpdateOptions
+            {
+                Name = options.Name, // mandatory field
+                Email = options.Email, // mandatory field
+                Phone = options.Phone, // mandatory field
+            };
+            if (options.Address.City != null && options.Address.City.Trim() != string.Empty) // non-mandatory field
+            {
+                cuo.Address = new Stripe.AddressOptions
+                {
+                    City = options.Address.City.Trim(),
+                    Country = options.Address.Country.Trim(),
+                    Line1 = options.Address.Line1.Trim(),
+                    Line2 = options.Address.Line2.Trim(),
+                    PostalCode = options.Address.PostalCode.Trim(),
+                };
+            }
+            if (options.Shipping.Name != null && options.Shipping.Name.Trim() != string.Empty) // non-mandatory field
+            {
+                cuo.Shipping = new Stripe.ShippingOptions
+                {
+                    Name = options.Shipping.Name.Trim(),
+                    Phone = options.Shipping.Phone.Trim(),
+                    Address = new Stripe.AddressOptions
+                    {
+                        City = options.Shipping.Address.City.Trim(),
+                        Country = options.Shipping.Address.Country.Trim(),
+                        Line1 = options.Shipping.Address.Line1.Trim(),
+                        Line2 = options.Shipping.Address.Line2.Trim(),
+                        PostalCode = options.Shipping.Address.PostalCode.Trim(),
+                    },
+                };
+
+            }
+            var service = new CustomerService();
+            var result = service.Update(customerId, cuo);
+            return result.Id;
+        }
+
+
         public Intent CreatePaymentIntent_Ext(string api_key, int amount, string currency, bool automatic_payment_method, string customer_id)
         {
             // https://stripe.com/docs/api/payment_intents?lang=dotnet
@@ -305,13 +347,17 @@ namespace psn.PH
         {
             var assembly = Assembly.GetExecutingAssembly();
             string resourcePath = name;
-            using (Stream stream = assembly.GetManifestResourceStream(resourcePath))
+            if (assembly.GetManifestResourceStream(resourcePath) != null)
+            {
+                using (Stream stream = assembly.GetManifestResourceStream(resourcePath)!)
             {
                 using (StreamReader reader = new StreamReader(stream))
                 {
                     return reader.ReadToEnd();
                 }
             }
+            }
+            return string.Empty;
         }
 
         public string GetBuildInfo_Ext()

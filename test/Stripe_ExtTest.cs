@@ -34,6 +34,53 @@ public class Stripe_ExtTests
     }
 
     [Fact]
+    public void UpdateCustomer_Ext_test1()
+    {
+        var se = new Stripe_Ext();
+
+        string name = "John Doe UpdateCustomer_Ext_test1";
+        string email = "john.doe@nowhere.com";
+        string phone = "+1982659123";
+        var cust_id = se.CreateCustomer_Ext(api_key, name, email, phone, new PaymentMethodCardOptions
+        {
+            Number = "4242424242424242",
+            ExpMonth = 12,
+            ExpYear = 2034,
+            Cvc = "314",
+            Token = "tok_us",
+        });
+
+        AddressOptions testAddress = new AddressOptions
+        {
+            City = "Singapore",
+            Country = "Singapore",
+            Line1 = "1 nowhere",
+            Line2 = "OffTheRoad 1234",
+            State = "Singapore",
+            PostalCode = "1234",
+        };
+
+        ShippingOptions shippingOptions = new ShippingOptions
+        {
+            Address = testAddress,
+            Name = "Mary Sim",
+            Phone = "+192496224",
+        };
+
+        CustomerUpdateOptions cuo = new CustomerUpdateOptions
+        {
+            Name = "Doe John UpdateCustomer_Ext_test1",
+            Email = "doe.john@nowhere.com",
+            Phone = "+1982659123",
+            Address = testAddress,
+            Shipping = shippingOptions,
+        };
+        output.WriteLine("Update customerID = " + cust_id);
+        var cust_id_updated = se.UpdateCustomer_Ext(api_key, cust_id, cuo);
+        Assert.True(cust_id_updated.ToString().Length > 0 && cust_id_updated == cust_id.ToString().Trim());
+    }
+
+    [Fact]
     public void CreatePaymentIntent_Ext_test1()
     {
         var se = new Stripe_Ext();
