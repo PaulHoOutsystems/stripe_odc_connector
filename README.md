@@ -1,1 +1,1 @@
-# stripe_odc_connector
+# ODC Stripe Connector
