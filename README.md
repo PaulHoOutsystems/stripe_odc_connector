@@ -71,6 +71,10 @@ You can create a Payment Intent for a customer as shown in the sample flow below
 
 ![Create session example](doc/images/create_paymentintent_example.png)
 
+## Found a bug?
+
+Kindly submit your bug report [here](https://github.com/PaulHoOutsystems/stripe_odc_connector/issues) and do indicate the build number of the library which you are using too.
+
 ## Contact
 
 You can reach out to me via email at paul.ho@outsystems.com 
