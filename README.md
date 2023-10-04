@@ -15,7 +15,7 @@ The connector provides the following functionality (as of now):
 4. CreateRefund
 5. CreateSubscription
 6. GetCharges
-7. RetrieveSubscriptionWithDetails
+7. RetrieveSubscriptionsWithDetails
 8. RetrieveSubscriptionDetails
 9. RetrieveSubscription
 10. SearchCustomer
