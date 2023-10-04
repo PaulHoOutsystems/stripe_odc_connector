@@ -44,7 +44,7 @@ namespace psn.PH
         /// Create a check out session.
         /// </summary>
         [OSAction(Description = "Create a check out session.", ReturnName = "JSONResponse")]
-        public string CreateCheckoutSession_Ext(string api_key, string successful_url, List<psn.PH.Structures.SessionLineItem> sessionLineItems, string mode);
+        public string CreateCheckoutSession_Ext(string api_key, string customer_id, string successful_url, List<psn.PH.Structures.SessionLineItem> sessionLineItems, string mode);
         /// <summary>
         /// Create a subscription.
         /// </summary>

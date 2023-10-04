@@ -230,7 +230,7 @@ namespace psn.PH
             return customer.Id;
         }
 
-        public string CreateCheckoutSession_Ext(string api_key, string successful_url, List<psn.PH.Structures.SessionLineItem> sessionLineItems, string mode)
+        public string CreateCheckoutSession_Ext(string api_key, string customer_id, string successful_url, List<psn.PH.Structures.SessionLineItem> sessionLineItems, string mode)
         {
             StripeConfiguration.ApiKey = api_key;
             var lineItems = new List<Stripe.Checkout.SessionLineItemOptions>();
@@ -252,6 +252,12 @@ namespace psn.PH
                 LineItems = lineItems,
                 Mode = mode,
             };
+
+            if (customer_id.Trim() != string.Empty)
+            {
+                // customer Id is an optional field
+                options.Customer = customer_id;
+            }
 
             var service = new Stripe.Checkout.SessionService();
             var serviceResult = service.Create(options);
@@ -350,12 +356,12 @@ namespace psn.PH
             if (assembly.GetManifestResourceStream(resourcePath) != null)
             {
                 using (Stream stream = assembly.GetManifestResourceStream(resourcePath)!)
-            {
-                using (StreamReader reader = new StreamReader(stream))
                 {
-                    return reader.ReadToEnd();
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        return reader.ReadToEnd();
+                    }
                 }
-            }
             }
             return string.Empty;
         }
