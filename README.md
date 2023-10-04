@@ -67,6 +67,8 @@ NOTE: The customer ID is an optional field. However, it is recommended to supply
 
 A PaymentIntent guides you through the process of collecting a payment from your customer. It is recommended that you create exactly one PaymentIntent for each order or customer session in your system. You can reference the PaymentIntent later to see the history of payment attempts for a particular session.
 
+A PaymentIntent tracks the customer’s payment lifecycle, keeping track of any failed payment attempts and ensuring the customer is only charged once. The CreatePaymentIntent API returns the PaymentIntent’s client secret in the response to finish the payment on the client.
+
 You can create a Payment Intent for a customer as shown in the sample flow below.
 
 ![Create session example](doc/images/create_paymentintent_example.png)
