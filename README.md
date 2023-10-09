@@ -5,7 +5,7 @@ OutSystems Developer Cloud (ODC) is a cloud-native app development platform that
 
 This connector has two parts:
 
-1. A custom code extension : Stripe_Ext
+1. A custom code extension : Stripe_ExternalLogic
 2. A library that uses the underlying custom code extension: Stripe Connector (Black Belt Edition)
 
 The connector provides the following functionality (as of now):
