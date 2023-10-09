@@ -9,7 +9,7 @@ namespace psn.PH
     /// In this connector we provide a block and actions that will allow you to make payments, 
     /// create and get customer details, and request for a refund on submitted charges.
     /// </summary>
-    [OSInterface(Description = "Stripe is a technology company that provides companies the software to accept payments, send payouts and manage their businesses online. In this connector we provide a block and actions that will allow you to make payments, create and get customer details, and request for a refund on submitted charges.", Name = "Stripe_Ext", IconResourceName = "psn.PH.StripeExtIcon.png")]
+    [OSInterface(Description = "This is the external logic to Stripe connector, which provide actions that will allow you to make payments, create and get customer details, and request for a refund on submitted charges.", Name = "Stripe_ExternalLogic", IconResourceName = "psn.PH.StripeExtIcon.png")]
     public interface IStripe_Ext
     {
         /// <summary>
