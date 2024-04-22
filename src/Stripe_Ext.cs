@@ -57,7 +57,7 @@ namespace psn.PH
             }
         }
 
-        public string CreateCustomer_Ext(string api_key, string name, string email, string phone, psn.PH.Structures.PaymentMethodCardOptions cardOptions)
+        public string CreateCustomer_Ext(string api_key, string name, string email, string phone)
         {
             if (!isValidateEmailAddress(email))
             {
@@ -73,21 +73,42 @@ namespace psn.PH
             };
             var cservice = new CustomerService();
             var serviceResult = cservice.Create(ccoptions);
-            var cardTokenOptions = new CardCreateOptions();
             var customerId = serviceResult.Id;
-            if (cardOptions.Token != String.Empty)
+            return customerId;
+        }
+
+        public string CreateCustomerWithCardAssociation_Ext(string api_key, string name, string email, string phone, psn.PH.Structures.PaymentMethodCardOptions cardOptions)
             {
-                cardTokenOptions = new CardCreateOptions
+            StripeConfiguration.ApiKey = api_key;
+            var customerId = CreateCustomer_Ext(api_key, name, email, phone);
+            if (cardOptions.Token != string.Empty)
+            {
+                var cardTokenOptions = new CardCreateOptions
                 {
                     Source = cardOptions.Token,
                 };
-
-            }
             // associate the card created to the customer as the source of payment
             var _cardService = new CardService();
             _cardService.Create(customerId, cardTokenOptions);
-
+            }
             return customerId;
+        }
+
+        public string AddCreditCard_Ext(string api_key, string customerId, psn.PH.Structures.PaymentMethodCardOptions cardOptions)
+        {
+            StripeConfiguration.ApiKey = api_key;
+            if (cardOptions.Token != string.Empty)
+            {
+                var cardTokenOptions = new CardCreateOptions
+                {
+                    Source = cardOptions.Token,
+                };
+                // associate the card created to the customer as the source of payment
+                var _cardService = new CardService();
+                var _card = _cardService.Create(customerId, cardTokenOptions);
+                return _card.Id;
+            }
+            return string.Empty;
         }
 
         public string UpdateCustomer_Ext(string api_key, string customerId, psn.PH.Structures.CustomerUpdateOptions options)
@@ -131,6 +152,23 @@ namespace psn.PH
             return result.Id;
         }
 
+        public string SearchCustomer_Ext(string api_key, string email)
+        {
+            StripeConfiguration.ApiKey = api_key;
+
+            var options = new CustomerSearchOptions
+            {
+                Query = "email:'" + email + "'",
+            };
+            var service = new CustomerService();
+            StripeSearchResult<Customer> searchResult = service.Search(options);
+            if (searchResult.TotalCount == 0)
+            {
+                return string.Empty;
+            }
+            Customer customer = searchResult.First();
+            return customer.Id;
+        }
 
         public Intent CreatePaymentIntent_Ext(string api_key, int amount, string currency, bool automatic_payment_method, string customer_id)
         {
@@ -215,19 +253,6 @@ namespace psn.PH
                 result.Add(charge);
             }
             return result;
-        }
-        public string SearchCustomer_Ext(string api_key, string email)
-        {
-            StripeConfiguration.ApiKey = api_key;
-
-            var options = new CustomerSearchOptions
-            {
-                Query = "email:'" + email + "'",
-            };
-            var service = new CustomerService();
-            StripeSearchResult<Customer> searchResult = service.Search(options);
-            Customer customer = searchResult.First();
-            return customer.Id;
         }
 
         public string CreateCheckoutSession_Ext(string api_key, string customer_id, string successful_url, List<psn.PH.Structures.SessionLineItem> sessionLineItems, string mode)

@@ -13,11 +13,23 @@ namespace psn.PH
     public interface IStripe_Ext
     {
         /// <summary>
+        /// Create a customer with card association.
+        /// </summary>
+        [OSAction(Description = "Create a customer with payment card association.", ReturnName = "CustomerId")]
+        public string CreateCustomerWithCardAssociation_Ext(string api_key, string name, string email, string phone, PaymentMethodCardOptions cardOptions);
+        /// <summary>
         /// Create a customer.
         /// </summary>
-        [OSAction(Description = "Create a customer.", ReturnName = "CustomerId")]
-        public string CreateCustomer_Ext(string api_key, string name, string email, string phone, PaymentMethodCardOptions cardOptions);
-
+        [OSAction(Description = "Create a customer without payment card association.", ReturnName = "CustomerId")]
+        public string CreateCustomer_Ext(string api_key, string name, string email, string phone);
+        /// <summary>
+        /// Create a payment card association for a customer.
+        /// </summary>
+        [OSAction(Description = "Create a payment card association for a customer.", ReturnName = "CardId")]
+        public string AddCreditCard_Ext(string api_key, string customerId, psn.PH.Structures.PaymentMethodCardOptions cardOptions);
+        /// <summary>
+        /// Update a customer.
+        /// </summary>
         [OSAction(Description = "Update a customer.", ReturnName = "CustomerId")]
         public string UpdateCustomer_Ext(string api_key, string customerId, CustomerUpdateOptions options);
         /// <summary>
