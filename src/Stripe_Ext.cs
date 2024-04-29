@@ -78,7 +78,7 @@ namespace psn.PH
         }
 
         public string CreateCustomerWithCardAssociation_Ext(string api_key, string name, string email, string phone, psn.PH.Structures.PaymentMethodCardOptions cardOptions)
-            {
+        {
             StripeConfiguration.ApiKey = api_key;
             var customerId = CreateCustomer_Ext(api_key, name, email, phone);
             if (cardOptions.Token != string.Empty)
@@ -87,9 +87,9 @@ namespace psn.PH
                 {
                     Source = cardOptions.Token,
                 };
-            // associate the card created to the customer as the source of payment
-            var _cardService = new CardService();
-            _cardService.Create(customerId, cardTokenOptions);
+                // associate the card created to the customer as the source of payment
+                var _cardService = new CardService();
+                _cardService.Create(customerId, cardTokenOptions);
             }
             return customerId;
         }
@@ -162,12 +162,11 @@ namespace psn.PH
             };
             var service = new CustomerService();
             StripeSearchResult<Customer> searchResult = service.Search(options);
-            if (searchResult.TotalCount == 0)
+            if (searchResult.Data.Count == 0)
             {
                 return string.Empty;
             }
-            Customer customer = searchResult.First();
-            return customer.Id;
+            return searchResult.Data[0].Id;
         }
 
         public Intent CreatePaymentIntent_Ext(string api_key, int amount, string currency, bool automatic_payment_method, string customer_id)

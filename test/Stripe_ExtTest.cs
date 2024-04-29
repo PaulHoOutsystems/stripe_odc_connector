@@ -219,6 +219,26 @@ public class Stripe_ExtTests
     }
 
     [Fact]
+    public void SearchCustomer_Ext_test1()
+    {
+        var se = new Stripe_Ext();
+        Assert.True(se.SearchCustomer_Ext(api_key, "notfound@nowhere.com") == string.Empty);
+    }
+
+    [Fact]
+    public void SearchCustomer_Ext_test2()
+    {
+        var se = new Stripe_Ext();
+        string name = "John Doe";
+        string email = "john.doe.searchtest2@nowhere.com";
+        string phone = "+1982659123";
+        // testing with card association
+        var cust_id = se.CreateCustomer_Ext(api_key, name, email, phone);
+        output.WriteLine("SearchTest2 Cust_id = " + cust_id);
+        Assert.True(se.SearchCustomer_Ext(api_key, "john.doe.searchtest2@nowhere.com") != string.Empty);
+    }
+
+    [Fact]
     public void GetBuildInfo_Ext_test1()
     {
         var se = new Stripe_Ext();
