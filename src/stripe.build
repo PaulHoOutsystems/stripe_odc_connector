@@ -1,6 +1,6 @@
 <project>
     <property name="outzipfilename" value="Strip Connector (Black Belt Edition)"/>
-    <property name="publish.dir" value="bin\Release\net6.0\linux-x64\publish"/>
+    <property name="publish.dir" value="bin\Release\net8.0\linux-x64\publish"/>
     <property name="buildnumberchecker" value="buildnumberchecker"/>
 	<target name="packzip">
 		<delete dir="${publish.dir}"/>

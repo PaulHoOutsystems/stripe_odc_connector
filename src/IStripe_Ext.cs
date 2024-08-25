@@ -36,7 +36,7 @@ namespace psn.PH
         /// Create a payment intent.
         /// </summary>
         [OSAction(Description = "Create a payment intent.", ReturnName = "Intent")]
-        public Intent CreatePaymentIntent_Ext(string api_key, int amount, string currency, bool automatic_payment_method, string customer_id);
+        public Intent CreatePaymentIntent_Ext(string api_key, int amount, string currency, bool automatic_payment_method, bool is_manual_capture, string customer_id);
         /// <summary>
         /// Create a refund.
         /// </summary>
@@ -77,7 +77,11 @@ namespace psn.PH
         /// </summary>
         [OSAction(Description = "Retrieve the subscription details of a customer.", ReturnName = "SubscriptionDetails")]
         public string RetrieveSubscriptionDetails_Ext(string api_key, string customer_id, string subscriptionId);
-
+        /// <summary>
+        /// Retrieve subscription details of a customer.
+        /// </summary>
+        [OSAction(Description = "Capture the funds of an existing uncaptured PaymentIntent when its status is requires_capture.", ReturnName = "status_message")]
+        public string CapturePaymentIntent_Ext(string api_key, string paymentIntent_id, long amount_to_capture);
         /// <summary>
         /// Retrieve unique build information of this custom library.
         /// </summary>

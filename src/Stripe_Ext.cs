@@ -169,11 +169,11 @@ namespace psn.PH
             return searchResult.Data[0].Id;
         }
 
-        public Intent CreatePaymentIntent_Ext(string api_key, int amount, string currency, bool automatic_payment_method, string customer_id)
+        public Intent CreatePaymentIntent_Ext(string api_key, int amount, string currency, bool automatic_payment_method, bool is_manual_capture, string customer_id)
         {
             // https://stripe.com/docs/api/payment_intents?lang=dotnet
             StripeConfiguration.ApiKey = api_key;
-
+            var capture_method = is_manual_capture ? "manual" : "automatic";
             var options = new PaymentIntentCreateOptions
             {
                 Amount = amount,
@@ -182,6 +182,7 @@ namespace psn.PH
                 {
                     Enabled = automatic_payment_method,
                 },
+                CaptureMethod = capture_method,
                 Customer = customer_id,
 
             };
@@ -201,6 +202,18 @@ namespace psn.PH
 
             return result;
         }
+        public string CapturePaymentIntent_Ext(string api_key, string paymentIntent_id, long amount_to_capture)
+        {
+            StripeConfiguration.ApiKey = api_key;
+            var options = new PaymentIntentCaptureOptions
+            {
+                AmountToCapture = amount_to_capture,
+            };
+            var service = new PaymentIntentService();
+            var serviceResult = service.Capture(paymentIntent_id, options);
+            return serviceResult.Status;
+        }
+
         public psn.PH.Structures.Refund CreateRefund_Ext(string api_key, string charge_id, long amount, string reason)
         {
             StripeConfiguration.ApiKey = api_key;
