@@ -301,7 +301,7 @@ namespace psn.PH
             return JsonSerializer.Serialize(serviceResult);
         }
 
-        public string CreateSubscription_Ext(string api_key, string customer_id, List<psn.PH.Structures.SubscriptionLineItem> subscriptionLineItems, List<psn.PH.Structures.SubscriptionMetadata> subscriptionMetadataItems)
+        public string CreateSubscription_Ext(string api_key, string customer_id, string payment_behavior, List<psn.PH.Structures.SubscriptionLineItem> subscriptionLineItems, List<psn.PH.Structures.SubscriptionMetadata> subscriptionMetadataItems)
         {
             StripeConfiguration.ApiKey = api_key;
             var lineItems = new List<Stripe.SubscriptionItemOptions>();
@@ -318,11 +318,13 @@ namespace psn.PH
                 };
                 lineItems.Add(lineItem);
             }
+
             var options = new SubscriptionCreateOptions
             {
                 Customer = customer_id,
                 Items = lineItems,
                 Metadata = metadataItems,
+                PaymentBehavior = string.IsNullOrEmpty(payment_behavior) ? "default_incomplete" : payment_behavior,
             };
             var service = new SubscriptionService();
             var serviceResult = service.Create(options);

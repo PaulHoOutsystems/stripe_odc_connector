@@ -134,7 +134,7 @@ public class Stripe_ExtTests
         string email = "john.doe@nowhere.com";
         string phone = "+1982659123";
         var cust_id = CreateSimpleCustomerWithCreditCardAssociation(name, email, phone);
-        Intent intent = se.CreatePaymentIntent_Ext(api_key, 100, "sgd", true, cust_id);
+        Intent intent = se.CreatePaymentIntent_Ext(api_key, 100, "sgd", true, false, cust_id);
         output.WriteLine("client_secret = " + intent.client_secret);
 
         Assert.True(intent.client_secret.Length > 0);
@@ -214,7 +214,7 @@ public class Stripe_ExtTests
                 value = "Europe"
             }
         };
-        var subscription = se.CreateSubscription_Ext(api_key, cust_id, subscriptionLineItems, subscriptionMetadataItems);
+        var subscription = se.CreateSubscription_Ext(api_key, cust_id, "", subscriptionLineItems, subscriptionMetadataItems);
         Assert.True(subscription.Length > 0 && subscription.IndexOf("\"id\": \"sub_") > 0 && subscription.IndexOf("\"object\": \"subscription\"") > 0);
     }
 

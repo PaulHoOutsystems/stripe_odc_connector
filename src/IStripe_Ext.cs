@@ -61,7 +61,7 @@ namespace psn.PH
         /// Create a subscription.
         /// </summary>
         [OSAction(Description = "Create a subscription.", ReturnName = "SubscriptionJSON")]
-        public string CreateSubscription_Ext(string api_key, string customer_id, List<psn.PH.Structures.SubscriptionLineItem> subscriptionLineItems, List<psn.PH.Structures.SubscriptionMetadata> subscriptionMetadataItems);
+        public string CreateSubscription_Ext(string api_key, string customer_id, string payment_behavior, List<psn.PH.Structures.SubscriptionLineItem> subscriptionLineItems, List<psn.PH.Structures.SubscriptionMetadata> subscriptionMetadataItems);
         /// <summary>
         /// Retrieve subscriptions of a customer.
         /// </summary>
